@@ -11,7 +11,8 @@ class StoreAtomsinASEdb:
     foldername: str
 
     def __post_init__(self):
-        self.specifics = yaml.safeload(op.join(self.foldername, 'details.yaml'))
+        self.specifics = yaml.safe_load(open(op.join(self.foldername, 'details.yaml'), 'r'))
+        print(self.specifics)
     
     def validate_inputs(self):
         """Validate that some specific optiosn exit."""

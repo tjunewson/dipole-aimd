@@ -14,8 +14,13 @@
         "numpy",
         "scipy",
         "matplotlib",
-        "ase"
+        "ase",
+        "click",
+        "PyYAML"
     ],
+    "entry_points": {
+        "console_scripts": ["parser = dipole_parser.parser:store_to_database"]
+    },
     "license": "MIT License",
     "name": "dipole_parser",
     "version": "0.0.01"
