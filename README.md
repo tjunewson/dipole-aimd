@@ -28,3 +28,7 @@ parser
 run_number: 0
 state: 'co2'
 ```
+
+# Analysis
+
+Analysis of the dipole moments is done by using `ParseDipole`.
