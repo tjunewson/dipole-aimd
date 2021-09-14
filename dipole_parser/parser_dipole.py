@@ -18,6 +18,7 @@ class StoreAtomsinASEdb:
         """Validate that some specific optiosn exit."""
         assert op.exists(self.foldername), f"{self.foldername} does not exist"
         assert op.exists(op.join(self.foldername, 'details.yaml')), f"{op.join(self.foldername, 'details.yaml')} does not exist"
+        assert op.exists(op.join(self.foldername, 'vasprun.xml')), f"{op.join(self.foldername, 'vasprun.xml')} does not exist" 
         assert 'run_number' in self.specifics
         assert 'state' in self.specifics
         self.state = self.specifics.pop('state')
@@ -27,9 +28,10 @@ class StoreAtomsinASEdb:
     def store_attributes(self): 
         """Store entry into ASE database based on the specics of the yaml file."""
         # read in the OUTCAR file
-        atoms_traj = read(op.join(self.foldername, 'OUTCAR'), ':')
+        atoms_traj = read(op.join(self.foldername, 'vasprun.xml'), ':')
         with db.connect(self.dbname) as database:
             for index, atoms in enumerate(atoms_traj):
                 specifics = {'state':self.state, 'run_number':self.run_number,} 
                 specifics['timestep'] = index
-                database.write(atoms, **specifics) 
+                specifics['atoms'] = atoms
+                database.write(**specifics) 
