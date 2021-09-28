@@ -33,7 +33,8 @@ class ParseDipole:
         with connect(self.ase_db_file) as handle:
             for row in handle.select():
                 # Consider only the dipole moment along the z-axis
-                yield row.dipole[-1], row.run_number, row.timestep, row.state
+                if row.get('dipole') is not None:
+                    yield row.dipole[-1], row.run_number, row.timestep, row.state
 
     def parse_dipole_moment(self):
         """Store the dipole moment and the structure in a dict of lists in sorted order of sampling."""
