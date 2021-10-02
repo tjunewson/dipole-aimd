@@ -1,4 +1,4 @@
-# `simple-dipole-aimd`
+# `dipole-aimd`
 
 Simple parser to allow for storing atoms objects into an ASE database for parsing their dipole moments.
 
