@@ -142,7 +142,7 @@ class CreateCation:
                 [-0.0347786, 11.85195424, 10.43097203 ],
             ]
             co2 = Atoms('CO2', positions=co2_positions)
-            height = data.covalent_radii[data.atomic_numbers[self.metal_name]] + 0.5
+            height = data.covalent_radii[data.atomic_numbers[self.metal_name]] + 0.75
             # get the position of the topmost metal atom
             position = self.surface.get_positions()[self.top_metal_atom]
             build.add_adsorbate(self.surface, co2, height=height, position = position[0:2])
@@ -211,15 +211,18 @@ class CreateCation:
         self.constrain_atoms()
         index = 1
         no_water = self.water_layers * self.water_per_layer - 1
-        state_info = self.metal_name + self.facet + '_' + self.cation + '_' + str(self.dimensions[0]) + 'x' + str(self.dimensions[1]) + '_' + 'cationlayer_' + str(self.layer_of_cation) + '_' + str(no_water) + 'w_' + str(index)
+        if self.adsorbate:
+            self.metal_name = self.metal_name + '_' + self.adsorbate
+        state_info = self.metal_name + '_' + self.facet + '_' + self.cation + '_' + str(self.dimensions[0]) + 'x' + str(self.dimensions[1]) + '_' + 'cationlayer_' + str(self.layer_of_cation) + '_' + str(no_water) + 'w_' + str(index)
 
         while os.path.exists(state_info):
             index += 1
-            state_info = self.metal_name + self.facet + '_' + self.cation + '_' + str(self.dimensions[0]) + 'x' + str(self.dimensions[1]) + '_' + 'cationlayer_' + str(self.layer_of_cation) + '_' + str(no_water) + 'w_' + str(index)
+            state_info = self.metal_name + '_' + self.facet + '_' + self.cation + '_' + str(self.dimensions[0]) + 'x' + str(self.dimensions[1]) + '_' + 'cationlayer_' + str(self.layer_of_cation) + '_' + str(no_water) + 'w_' + str(index)
 
         folder = os.path.join(os.getcwd(), state_info, 'pre_relaxation')
         Path(folder).mkdir(parents=True, exist_ok=True)
         self.folder = folder
 
         # Write the atoms object to that folder
-        self.surface.write(os.path.join(self.folder, 'pre_relaxation.json'), format='json')
+        self.surface.set_pbc([True, True, True])
+        self.surface.write(os.path.join(self.folder, 'pre_relaxation.traj'),)
