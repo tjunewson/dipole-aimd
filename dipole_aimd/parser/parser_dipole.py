@@ -67,4 +67,16 @@ class StoreAtomsinASEdb:
             self.run_number = 0
         self.specifics = {'state':self.state, 'run_number':self.run_number,}
         print(self.specifics)
+    
+    def get_specifics_for_run_folders(self):
+        """Get the specifics for the folder where the run folders are."""
+        # Get the specifics from the folder names for the run folders default option
+        # The state information comes from the first part of the folder name
+        self.state = self.foldername.split('/')[0]
+        # The run number comes from the last part of the OUTCAR name. For example, if the 
+        # OUTCAR_1 is in the folder, then the run number is 1. If no number is found, then
+        # the run number is 0.
+        self.run_number = int(self.foldername.split('/')[-2].split('_')[-1])
+        self.specifics = {'state':self.state, 'run_number':self.run_number,}
+        print(self.specifics) 
         

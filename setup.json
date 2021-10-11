@@ -19,7 +19,7 @@
         "PyYAML"
     ],
     "entry_points": {
-        "console_scripts": ["parser = dipole_aimd.dipole_parser.parser:store_to_database"]
+        "console_scripts": ["parser = dipole_aimd.parser.parser:store_to_database"]
     },
     "license": "MIT License",
     "name": "dipole_parser",

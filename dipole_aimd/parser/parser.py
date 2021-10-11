@@ -3,7 +3,7 @@ from pprint import pprint
 from ase.db import connect
 import click
 import glob
-from dipole_parser.parser_dipole import StoreAtomsinASEdb
+from dipole_aimd.parser.parser_dipole import StoreAtomsinASEdb
 
 @click.command()
 @click.option('--dbname', default='test.db')
@@ -76,6 +76,31 @@ def store_to_database(dbname, default, consider, exclude, exact):
             # If it is successful, store the folder name parsed
             completed_file = dbname.replace('.db', '_completed.txt')
             print(foldername, file=open(completed_file, 'a'))
+    elif default == 'run_folders':
+        # This default assumes that all the outcar files are in folders
+        # called run_XYZ where XYZ is the run number.
+        print('Run folders path chosen.')
+        if consider is not None:
+            all_paths = glob.glob('*' + consider + '*/run_**/OUTCAR', recursive=True)
+        elif exact is not None:
+            all_paths = glob.glob('*/' + exact + '*/run_**/OUTCAR*', recursive=True)
+        else:
+            all_paths = glob.glob('**/run_**/OUTCAR*', recursive=True)
+        
+        for paths in all_paths:
+            if exclude is not None:
+                if exclude in paths:
+                    continue
+            foldername = paths
+
+            try:
+                method = StoreAtomsinASEdb(dbname=dbname, foldername=foldername)
+                method.get_specifics_for_run_folders()
+                method.store_attributes('')
+            except:
+                error_file = dbname.replace('.db', '_error.txt')
+                print('Could not store {}'.format(foldername), file=open(error_file, 'a'))
+                continue
 
 
 
