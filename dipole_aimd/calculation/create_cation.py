@@ -27,7 +27,8 @@ def check_xy_distance(test_atoms, cutoff_fraction):
                             data.covalent_radii[data.atomic_numbers[test_atoms[j].symbol]]
             # Reduce the min cutoff by the cutoff fraction
             min_cutoff = min_cutoff * cutoff_fraction
-            if np.linalg.norm(test_atoms.get_positions()[i] - test_atoms.get_positions()[j]) < min_cutoff:
+            # if np.linalg.norm(test_atoms.get_positions()[i] - test_atoms.get_positions()[j]) < min_cutoff:
+            if test_atoms.get_distance(i,j, mic=True) < min_cutoff:
                 return False
     return True
 
