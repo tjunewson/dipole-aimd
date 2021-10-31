@@ -81,9 +81,9 @@ def store_to_database(dbname, default, consider, exclude, exact):
         # called run_XYZ where XYZ is the run number.
         print('Run folders path chosen.')
         if consider is not None:
-            all_paths = glob.glob('*' + consider + '*/run_**/OUTCAR', recursive=True)
+            all_paths = glob.glob('*' + consider + '*/run_**/vasprun.xml', recursive=True)
         elif exact is not None:
-            all_paths = glob.glob('*/' + exact + '*/run_**/OUTCAR*', recursive=True)
+            all_paths = glob.glob('*/' + exact + '*/run_**/vasprun.xml*', recursive=True)
         else:
             all_paths = glob.glob('**/run_**/OUTCAR*', recursive=True)
         
