@@ -21,6 +21,7 @@ class ParseEnergy:
     """
     ase_db_file: str
     output_file: str
+    output_file_raw:str
 
     def __post_init__(self):
         self.energy = defaultdict(list)
@@ -48,17 +49,22 @@ class ParseEnergy:
             energy_data = np.array(energy_data)
             sorted_index = np.lexsort((energy_data[:, 0], energy_data[:, 1]))
             self.energy[structure].append(energy_data[sorted_index]) 
-
+        
         # Store the quantities for later use
+        self.raw_energy = defaultdict(list)
         self.avg_energy = defaultdict(list)
-
+        
         # Find the cumulative average of the energy
         for structure, data in self.energy.items():
             _, _, energy = np.array(data).T
+            raw_energy = energy
             energy_average = cumulative_average(energy)
             time_in_ps = np.arange(0, len(energy_average), 1) * 0.001
+            self.raw_energy[structure] = [time_in_ps.tolist(), raw_energy.tolist()]
             self.avg_energy[structure] = [time_in_ps.tolist(), energy_average.tolist()]
-
+            self.energy_summary[structure] = [self.raw_energy[structure],self.avg_energy[structure]]
         # Save the file as a json
         with open(self.output_file, 'w') as handle:
             json.dump(self.avg_energy, handle)
+        with open(self.output_file_raw,'w') as handle:
+            json.dump(self.raw_energy, handle)
