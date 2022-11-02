@@ -51,14 +51,19 @@ class ParseEnergy:
 
         # Store the quantities for later use
         self.avg_energy = defaultdict(list)
+        self.avg_energy = defaultdict(list)
 
         # Find the cumulative average of the energy
         for structure, data in self.energy.items():
             _, _, energy = np.array(data).T
+            raw_energy = np.array(energy).flatten()
             energy_average = cumulative_average(energy)
             time_in_ps = np.arange(0, len(energy_average), 1) * 0.001
+            self.raw_energy[structure] = [time_in_ps.tolist(), raw_energy.tolist()]
             self.avg_energy[structure] = [time_in_ps.tolist(), energy_average.tolist()]
 
         # Save the file as a json
         with open(self.output_file, 'w') as handle:
             json.dump(self.avg_energy, handle)
+        with open(self.output_file_raw,'w') as handle:
+            json.dump(self.raw_energy, handle)
