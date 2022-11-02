@@ -21,6 +21,7 @@ class ParseEnergy:
     """
     ase_db_file: str
     output_file: str
+    output_file_raw: str
 
     def __post_init__(self):
         self.energy = defaultdict(list)
