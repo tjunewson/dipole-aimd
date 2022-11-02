@@ -51,7 +51,7 @@ class ParseEnergy:
 
         # Store the quantities for later use
         self.avg_energy = defaultdict(list)
-        self.avg_energy = defaultdict(list)
+        self.raw_energy = defaultdict(list)
 
         # Find the cumulative average of the energy
         for structure, data in self.energy.items():
